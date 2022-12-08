@@ -1,0 +1,225 @@
+Aim: 1.A. Program to implement password salting and hashing
+to create secure password using bcrypt library.
+Code:- pip install bcrypt
+
+import bcrypt
+
+password = input('Enter Password: ')
+pw = bytes(password, 'UTF-8')
+pw
+Output:- Enter Password: Liverpool09
+b'Liverpool09'
+
+salt = bcrypt.gensalt()
+
+hashed_pw = bcrypt.hashpw(pw, salt)
+
+print('Password is ', pw, 'its salted hash is ', hashed_pw)
+
+##########################################################################
+
+Aim: 1.B. Program to implement password salting and hashing
+to create secure password using hashlib library.
+code:- import hashlib
+
+password = input('Enter Password: ')
+password
+output:- Enter Password: Liverpoolfc
+'Liverpoolfc'
+
+salt = input('Enter Salt value: ')
+salt
+output:- Enter Salt value: Mosalha
+'Mosalha'
+
+salted_pw = password + salt
+salted_pw
+output:- 'LiverpoolfcMosalha'
+
+hashed_pw = hashlib.md5(salted_pw.encode())
+hashed_pw
+output:- <md5 HASH object @ 0x7f333fff0cb0>
+
+print(hashed_pw.hexdigest())
+output:- b965ed2ac537abed766bba9f68b8194c
+
+##########################################################################
+
+Aim: 2.A. Implementing substitution cipher algorithm to create
+cipher text.
+
+import string
+
+all_letters = string.ascii_letters
+all_letters
+output:- 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+
+dict = {}
+
+key = 3
+
+for i in range(len(all_letters)):
+	dict[all_letters[i]] = all_letters[(i + key) % len(all_letters)]
+
+dict
+
+{'a': 'd',
+'b': 'e',
+'c': 'f',...}
+
+plain_text = input('Enter Text: ')
+plain_text
+output:- Enter Text: Liverpoolfc
+'Liverpoolfc'
+
+cipher_text = []
+
+for char in plain_text:
+	if char in all_letters:
+		temp = dict[char]
+		cipher_text.append(temp)
+	else:
+		temp = char
+		cipher_text.append(temp)
+
+cipher_text = "".join(cipher_text)
+cipher_text
+output:- 'Olyhusrroif'
+
+####################################################################
+
+Aim: 2.B. Implementing vigener cipher algorithm to create
+cipher text.
+
+def generateKey(string, key):
+	key = list(key)
+	if (len(string) == len(key)):
+		return(key)
+	else:
+		for i in range(len(string) - len(key)):
+			key.append(key[i % len(key)])
+	return("".join(key))
+
+answer = generateKey('CRYPTOGRAPHY', 'LIVERPOOL')
+answer
+Output:- 'LIVERPOOLLIV'
+
+def cipherText(string, key):
+	cipher_text = []
+	for i in range(len(string)):
+		x = (ord(string[i]) + ord(key[i])) % 26
+		x += ord('A')
+		cipher_text.append(chr(x))
+	return("".join(cipher_text))
+
+string = input('Enter Text: ')
+string
+Output:- Enter Text: MOSALHA
+'MOSALHA'
+
+keyword = input('Enter Key: ')
+keyword
+Output:- Enter Key: Liverpool
+'Liverpool'
+
+key = generateKey(string, keyword)
+key
+Output:- 'Liverpool'
+
+cipher = cipherText(string, key)
+cipher
+Output:- 'XCTKICU'
+
+print('Plain Text: ', string)
+Output:- Plain Text:  MOSALHA
+
+print('Cipher Text: ', cipher)
+Output:- Cipher Text:  XCTKICU
+
+###############################################################
+
+Aim: 3.A. Decrypt analysis of cipher text generated using
+substitution cipher.
+
+import string
+
+all_letters = string.ascii_letters
+all_letters
+
+Output:- 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+
+dict = {}
+
+key = 3
+
+for i in range(len(all_letters)):
+	dict[all_letters[i]] = all_letters[(i - key) % len(all_letters)]
+
+dict
+Output:- {'a': 'X',
+'b': 'Y',
+'c': 'Z',
+'d': 'a',...}
+
+decrypt_text = []
+
+cipher_text = 'Sudfwlfdo 3D'
+
+for char in cipher_text:
+	if char in all_letters:
+		temp = dict[char]
+		decrypt_text.append(temp)
+	else:
+		temp = char
+		decrypt_text.append(temp)
+
+decrypted_text = "".join(decrypt_text)
+decrypted_text
+Output:- 'Practical 3A'
+
+##############################################################################
+
+Aim: 3.B. Decrypt analysis of cipher text generated using vigener cipher.
+
+def generateKey(string, key):
+	key = list(key)
+	if(len(string) == len(key)):
+		return(key)
+	else:
+		for i in range(len(string) - len(key)):
+			key.append(key[i % len(key)])
+	return("".join(key))
+
+answer = generateKey('GEEKSFORGEEKS', 'AYUSH')
+answer
+Output:- 'AYUSHAYUSHAYU'
+
+string = 'GEEKSFORGEEKS'
+string
+Output:- 'GEEKSFORGEEKS'
+
+key = 'AYUSH'
+key
+Output:- 'AYUSH'
+
+keyword = generateKey('GCYCZFMLYLEIM', key)
+keyword
+Output:- 'AYUSHAYUSHAYU'
+
+cipher_text = 'GCYCZFMLYLEIM'
+cipher_text
+Output:- 'GCYCZFMLYLEIM'
+
+def decrypt_cipher(cipher_text, key):
+	decrypted_text = []
+	for i in range(len(cipher_text)):
+		x = (ord(cipher_text[i]) - ord(key[i]) + 26) % 26
+		x += ord('A')
+		decrypted_text.append(chr(x))
+	return("".join(decrypted_text))
+
+decrypt_text = decrypt_cipher(cipher_text, keyword)
+decrypt_text
+Output:- 'GEEKSFORGEEKS'
+
+################################################################################
